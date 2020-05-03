@@ -33,17 +33,17 @@ public:
 	cusName = new char[strlen(ref.cusName) + 1];
 	strcpy(cusName, ref.cusName);
     }
-    int GetAccID()
+    int GetAccID() const
     {
 	return accID;
     }
 
-    int GetBalance()
+    int GetBalance() const
     {
 	return balance;
     }
 
-    char* GetCusName() 
+    char* GetCusName() const
     {
 	return cusName;
     }
@@ -62,7 +62,7 @@ public:
 	    return money;
     }
 
-    void ShowAccInfo()
+    void ShowAccInfo() const
     {
 	cout << "계좌ID: "<<accID<<endl;
 	cout << "이 름: "<<cusName<<endl;

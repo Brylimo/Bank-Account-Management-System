@@ -26,7 +26,13 @@ public:
 	cusName = new char[strlen(name) + 1];
 	strcpy(cusName, name);
     }
-
+    
+    Account(const Account &ref)
+    :accID(ref.accID), balance(ref.balance)
+    {
+	cusName = new char[strlen(ref.cusName) + 1];
+	strcpy(cusName, ref.cusName);
+    }
     int GetAccID()
     {
 	return accID;

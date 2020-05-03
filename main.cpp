@@ -20,40 +20,53 @@ private:
     char* cusName;  // 고객이름
 
 public:
-    Account(int accID, int balance, char* name)
+    Account(int accID, int balance, char* name);    
+    Account(const Account &ref);
+
+    int GetAccID() const;
+    int GetBalance() const;
+    char* GetCusName() const;
+    void Deposit(int money);
+    int Withdraw(int money);
+    void ShowAccInfo() const;
+    ~Account();
+};
+
+    Account::Account(int accID, int balance, char* name)
     :accID(accID), balance(balance)
     {	
 	cusName = new char[strlen(name) + 1];
 	strcpy(cusName, name);
     }
     
-    Account(const Account &ref)
+    Account::Account(const Account &ref)
     :accID(ref.accID), balance(ref.balance)
     {
 	cusName = new char[strlen(ref.cusName) + 1];
 	strcpy(cusName, ref.cusName);
     }
-    int GetAccID() const
+
+    int Account::GetAccID() const
     {
 	return accID;
     }
 
-    int GetBalance() const
+    int Account::GetBalance() const
     {
 	return balance;
     }
 
-    char* GetCusName() const
+    char* Account::GetCusName() const
     {
 	return cusName;
     }
 
-    void Deposit(int money)
+    void Account::Deposit(int money)
     {
 	balance += money;
     }
 
-    int Withdraw(int money)
+    int Account::Withdraw(int money)
     {
 	if (balance < money)
 	    return 0;
@@ -62,65 +75,38 @@ public:
 	    return money;
     }
 
-    void ShowAccInfo() const
+    void Account::ShowAccInfo() const
     {
 	cout << "계좌ID: "<<accID<<endl;
 	cout << "이 름: "<<cusName<<endl;
 	cout << "잔 액: "<<balance<<endl;	
     }
 
-    ~Account()
+    Account::~Account()
     {
 	delete []cusName;
     }
+
+class AccountHandler
+{
+private:
+    Account* accArr[100]; // Account 저장을 위한 배열
+    int accNum;	  //저장된 Account 수
+
+public:
+   AccountHandler();
+
+   void ShowMenu() const;
+   void MakeAccount();
+   void DepositMoney();
+   void WithdrawMoney();
+   void ShowAllAccInfo() const;
+   ~AccountHandler();        
 };
 
-Account* accArr[100];	// Account 저장을 위한 배열
-int accNum = 0;		//저장된 Account 수
-
-int main(void)
-{
-    int choice;
-
-    while(true)
-    {
-	ShowMenu();
-	cout << "선택: "; cin >> choice;
-	cout << endl;
-
-	switch(choice)
-	{
-	    case MAKE:
-		MakeAccount();
-		break;
-
-	    case DEPOSIT:
-		DepositMoney();
-		break;
-
-	    case WITHDRAW:
-		WithdrawMoney();
-		break;
-
-	    case INQUIRE:
-		ShowAllAccInfo();
-		break;
-
-	    case EXIT:
-		for (int i = 0; i < accNum; i++)
-		    delete accArr[i];
-		return 0;
-
-	    default:
-		cout << "Illegal Selection.." << endl;
-	}	    
-    }
-
-
-    return 0;
-}
-
-void ShowMenu(void)
+AccountHandler::AccountHandler():accNum(0) {}
+    
+void AccountHandler::ShowMenu(void) const
 {
     cout << "-----Menu------" << endl;
     cout << "1. 계좌개설" << endl;
@@ -130,7 +116,7 @@ void ShowMenu(void)
     cout << "5. 프로그램 종료" << endl;  
 }
 
-void MakeAccount(void)
+void AccountHandler::MakeAccount(void)
 {
     int id, balance;
     char name[NAME_LEN];
@@ -144,7 +130,7 @@ void MakeAccount(void)
     accArr[accNum++] = new Account(id, balance, name);
 }
 
-void DepositMoney(void)
+void AccountHandler::DepositMoney(void)
 {
     int money, id;
 
@@ -164,7 +150,7 @@ void DepositMoney(void)
     cout << "유효하지 않은 ID 입니다." << endl<<endl;
 }
 
-void WithdrawMoney(void)
+void AccountHandler::WithdrawMoney(void)
 {   
     int money, id;
 
@@ -189,7 +175,7 @@ void WithdrawMoney(void)
     cout << "유효하지 않은 ID 입니다." << endl<<endl;
 }
 
-void ShowAllAccInfo(void)
+void AccountHandler::ShowAllAccInfo(void) const
 {
    for (int i = 0; i < accNum; i++)
    {
@@ -198,4 +184,49 @@ void ShowAllAccInfo(void)
    }
 }
 
+AccountHandler::~AccountHandler()
+{
+    for (int i = 0; i < accNum; i++)
+	delete accArr[i];
+}
 
+int main(void)
+{
+    int choice;
+    AccountHandler manager;
+
+    while(true)
+    {
+	manager.ShowMenu();
+	cout << "선택: "; cin >> choice;
+	cout << endl;
+
+	switch(choice)
+	{
+	    case MAKE:
+		manager.MakeAccount();
+		break;
+
+	    case DEPOSIT:
+		manager.DepositMoney();
+		break;
+
+	    case WITHDRAW:
+		manager.WithdrawMoney();
+		break;
+
+	    case INQUIRE:
+		manager.ShowAllAccInfo();
+		break;
+
+	    case EXIT:
+		return 0;
+
+	    default:
+		cout << "Illegal Selection.." << endl;
+	}	    
+    }
+
+
+    return 0;
+}

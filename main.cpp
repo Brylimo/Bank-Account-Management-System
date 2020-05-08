@@ -12,6 +12,8 @@ void ShowAllAccInfo(void);  // 잔액조회
 
 enum {MAKE=1, DEPOSIT, WITHDRAW, INQUIRE, EXIT};
 
+enum {LEVEL_A=7, LEVEL_B=4, LEVEL_C=2};
+
 class Account
 {
 private:
@@ -26,7 +28,7 @@ public:
     int GetAccID() const;
     int GetBalance() const;
     char* GetCusName() const;
-    void Deposit(int money);
+    virtual void Deposit(int money);
     int Withdraw(int money);
     void ShowAccInfo() const;
     ~Account();
@@ -87,6 +89,41 @@ public:
 	delete []cusName;
     }
 
+class NormalAccount : public Account
+{
+    private:
+	int interRate;
+
+    public:
+	NormalAccount(int accID, int balance, char* name, int rate)
+	    :Account(accID, balance, name), interRate(rate)
+	{ }
+
+	virtual void Deposit(int money)
+	{
+	    Account::Deposit(money);
+	    Account::Deposit(money * (interRate/100.0));	
+	}
+};
+
+class HighCreditAccount : public NormalAccount
+{
+    private:
+	int specialRate;
+
+    public:
+	HighCreditAccount(int accID, int balance, char* name, int rate, int special)
+	    :NormalAccount(accID, balance, name, rate), specialRate(special)
+	{ } 
+	
+	virtual void Deposit(int money)
+	{
+	    NormalAccount::Deposit(money);
+	    Account::Deposit(money*(specialRate / 100.0));
+	}
+
+};
+
 class AccountHandler
 {
 private:
@@ -102,6 +139,10 @@ public:
    void WithdrawMoney();
    void ShowAllAccInfo() const;
    ~AccountHandler();        
+
+protected:
+   void MakeNormalAccount(void);
+   void MakeCreditAccount(void);
 };
 
 AccountHandler::AccountHandler():accNum(0) {}
@@ -117,17 +158,22 @@ void AccountHandler::ShowMenu(void) const
 }
 
 void AccountHandler::MakeAccount(void)
-{
-    int id, balance;
-    char name[NAME_LEN];
-
-    cout << "[계좌개설]" << endl;
-    cout << "계좌ID: ";	cin >> id;
-    cout << "이 름: ";	cin >> name;
-    cout << "입금액: ";	cin >> balance;
-    cout << endl;
-
-    accArr[accNum++] = new Account(id, balance, name);
+{    
+    int choice;
+    cout << "[계좌종류선택]" << endl;
+    cout << "1.보통예금계좌 2.신용신뢰계좌" << endl;
+    cout << "선택: "; cin >> choice;
+    
+    switch(choice)
+    {
+	case 1:
+	    MakeNormalAccount();
+	    break;
+	
+	case 2:
+	    MakeCreditAccount();
+	    break;
+    }	
 }
 
 void AccountHandler::DepositMoney(void)
@@ -188,6 +234,49 @@ AccountHandler::~AccountHandler()
 {
     for (int i = 0; i < accNum; i++)
 	delete accArr[i];
+}
+
+void AccountHandler::MakeNormalAccount(void)
+{
+    int id, balance, rate;
+    char name[NAME_LEN];
+
+    cout << "[보통예금계좌 개설]" << endl;
+    cout << "계좌ID: ";	cin >> id;
+    cout << "이 름: ";	cin >> name;
+    cout << "입금액: ";	cin >> balance;
+    cout << "이자율: ";	cin >> rate;
+    cout << endl;
+
+    accArr[accNum++] = new NormalAccount(id, balance, name, rate);
+}
+
+void AccountHandler::MakeCreditAccount(void)
+{
+    int id, balance, rate, creditLevel;
+    char name[NAME_LEN];
+
+    cout << "[신용신뢰계좌 개설]" << endl;
+    cout << "계좌ID: ";	cin >> id;
+    cout << "이 름: ";	cin >> name;
+    cout << "입금액: ";	cin >> balance;
+    cout << "이자율: ";	cin >> rate;
+    cout << "신용등급(1toA, 2toB, 3toC): "; cin >> creditLevel;
+    cout << endl;
+
+    switch(creditLevel)
+    {
+	case 1:
+	    accArr[accNum++] = new HighCreditAccount(id, balance, name, rate, LEVEL_A);
+	    break;
+	case 2:
+	    accArr[accNum++] = new HighCreditAccount(id, balance, name, rate, LEVEL_B);
+	    break;
+	case 3:
+	    accArr[accNum++] = new HighCreditAccount(id, balance, name, rate, LEVEL_C);
+	    break;
+    }
+
 }
 
 int main(void)

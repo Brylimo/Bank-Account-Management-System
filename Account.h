@@ -11,6 +11,7 @@ private:
 public:
     Account(int accID, int balance, char* name);    
     Account(const Account &ref);
+    Account& operator=(const Account& ref);
 
     int GetAccID() const;
     int GetBalance() const;

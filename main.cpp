@@ -35,6 +35,7 @@ int main(void)
 
 	    default:
 		cout << "Illegal Selection.." << endl;
+		return 0;
 	}	    
     }
 

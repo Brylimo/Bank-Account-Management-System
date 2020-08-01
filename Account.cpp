@@ -1,29 +1,12 @@
 #include "BankingCommonDecl.h"
 #include "Account.h"
 
-Account& Account::operator=(const Account& ref)
-{
-    accID = ref.accID;
-    balance = ref.balance;
-    
-    delete []cusName;
-    cusName = new char[strlen(ref.cusName)+1];
-    strcpy(cusName, ref.cusName);
-    return *this;
-}
-
-Account::Account(int accID, int balance, char* name)
+Account::Account(int accID, int balance, String name)
     :accID(accID), balance(balance)
 {	
-    cusName = new char[strlen(name) + 1];
-    strcpy(cusName, name);
-}
-    
-Account::Account(const Account &ref)
-    :accID(ref.accID), balance(ref.balance)
-{
-    cusName = new char[strlen(ref.cusName) + 1];
-    strcpy(cusName, ref.cusName);
+    //cusName = new char[strlen(name) + 1];
+    //strcpy(cusName, name);
+    cusName = name;
 }
 
 int Account::GetAccID() const
@@ -34,11 +17,6 @@ int Account::GetAccID() const
 int Account::GetBalance() const
 {
     return balance;
-}
-
-char* Account::GetCusName() const
-{
-    return cusName;
 }
 
 void Account::Deposit(int money)
@@ -60,9 +38,4 @@ void Account::ShowAccInfo() const
     cout << "계좌ID: "<<accID<<endl;
     cout << "이 름: "<<cusName<<endl;
     cout << "잔 액: "<<balance<<endl;	
-}
-
-Account::~Account()
-{
-    delete []cusName;
 }

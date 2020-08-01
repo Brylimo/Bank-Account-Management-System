@@ -3,6 +3,7 @@
 #include "Account.h"
 #include "NormalAccount.h"
 #include "HighCreditAccount.h"
+#include "String.h"
 
 AccountHandler::AccountHandler():accNum(0) {}
     
@@ -43,7 +44,7 @@ void AccountHandler::DepositMoney(void)
     cout << "계좌ID: "; cin >> id;
     cout << "입금액: "; cin >> money;
 
-    for (int i; i < accNum; i++)
+    for (int i=0; i < accNum; i++)
     {
 	if (accArr[i]->GetAccID() == id)
 	{
@@ -63,7 +64,7 @@ void AccountHandler::WithdrawMoney(void)
     cout << "계좌ID: "; cin >> id;
     cout << "출금액: "; cin >> money;
 
-    for (int i; i < accNum; i++)
+    for (int i=0; i < accNum; i++)
     {
 	if (accArr[i]->GetAccID() == id)
 	{
@@ -98,7 +99,7 @@ AccountHandler::~AccountHandler()
 void AccountHandler::MakeNormalAccount(void)
 {
     int id, balance, rate;
-    char name[NAME_LEN];
+    String name;
 
     cout << "[보통예금계좌 개설]" << endl;
     cout << "계좌ID: ";	cin >> id;
@@ -113,7 +114,7 @@ void AccountHandler::MakeNormalAccount(void)
 void AccountHandler::MakeCreditAccount(void)
 {
     int id, balance, rate, creditLevel;
-    char name[NAME_LEN];
+    String name;
 
     cout << "[신용신뢰계좌 개설]" << endl;
     cout << "계좌ID: ";	cin >> id;

@@ -2,6 +2,7 @@
 #define __HIGHCREDIT_ACCOUNT_H__
 
 #include "NormalAccount.h"
+#include "String.h"
 
 class HighCreditAccount : public NormalAccount
 {
@@ -9,7 +10,7 @@ private:
     int specialRate;
 
 public:
-    HighCreditAccount(int accID, int balance, char* name, int rate, int special)
+    HighCreditAccount(int accID, int balance, String name, int rate, int special)
 	:NormalAccount(accID, balance, name, rate), specialRate(special)
     { } 
 	

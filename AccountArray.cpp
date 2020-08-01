@@ -1,22 +1,14 @@
-#include "BankingCommonDec1.h"
+#include "BankingCommonDecl.h"
 #include "AccountArray.h"
+#include <cstdio>
+#include <cstdlib>
 
-BoundCheckAccountPtrArray::BoundCheckAccountPtrArray(int len=100) :arrlen(len)
+BoundCheckAccountPtrArray::BoundCheckAccountPtrArray(int len) : arrlen(len)
 {
-    arr = new Account[arrlen];        
+    arr = new ACCOUNT_PTR[arrlen];        
 }
 
-BoundCheckAccountPtrArray::ACCOUNT_PTR& operator[] (int idx)
-{
-    if(idx<0 || idx>=arrlen)
-    {
-	cout<<"Array index out of bound exception"<<endl;
-	exit(1);
-    }
-    return arr[idx];
-}
-
-ACCOUNT_PTR operator[] (int idx) const
+ACCOUNT_PTR& BoundCheckAccountPtrArray::operator[] (int idx)
 {
     if(idx<0 || idx>=arrlen)
     {
@@ -26,12 +18,22 @@ ACCOUNT_PTR operator[] (int idx) const
     return arr[idx];
 }
 
-int GetArrLen() const
+ACCOUNT_PTR BoundCheckAccountPtrArray::operator[] (int idx) const
+{
+    if(idx<0 || idx>=arrlen)
+    {
+	cout<<"Array index out of bound exception"<<endl;
+	exit(1);
+    }
+    return arr[idx];
+}
+
+int BoundCheckAccountPtrArray::GetArrLen() const
 {
     return arrlen;
 }
 
-~BoundCheckAccountPtrArray()
+BoundCheckAccountPtrArray::~BoundCheckAccountPtrArray()
 {
     delete []arr;
 }

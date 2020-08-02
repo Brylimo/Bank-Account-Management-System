@@ -14,13 +14,10 @@ AccountHandler.o : AccountHandler.cpp AccountHandler.h Account.h BankingCommonDe
 main.o : main.cpp BankingCommonDecl.h AccountHandler.h
 	$(CXX) -c $<
 
-AccountArray.o : AccountArray.cpp AccountArray.h BankingCommonDecl.h
-	$(CXX) -c $<
-
 String.o : String.cpp String.h BankingCommonDecl.h
 	$(CXX) -c $<
 	
-$(TARGET) : main.o AccountHandler.o Account.o AccountArray.o String.o
+$(TARGET) : main.o AccountHandler.o Account.o String.o
 	$(CXX) -o $@ $^
 
 clean :	

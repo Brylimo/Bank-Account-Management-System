@@ -2,12 +2,12 @@
 #define __ACCOUN_HANDLER_H__
 
 #include "Account.h"
-#include "AccountArray.h"
+#include "BoundCheckArray.h"
 
 class AccountHandler
 {
 private:
-    BoundCheckAccountPtrArray accArr; // Account 저장을 위한 배열
+    BoundCheckArray<Account*> accArr; // Account 저장을 위한 배열
     int accNum;	  //저장된 Account 수
 
 public:

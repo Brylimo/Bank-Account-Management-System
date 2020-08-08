@@ -3,6 +3,7 @@
 
 #include "Account.h"
 #include "String.h"
+#include "AccountException.h"
 
 class NormalAccount : public Account
 {
@@ -16,6 +17,9 @@ public:
 
     virtual void Deposit(int money)
     {
+	if (money < 0)
+	    throw MinusException(money);
+
 	Account::Deposit(money);
 	Account::Deposit(money * (interRate/100.0));	
     }

@@ -16,6 +16,9 @@ public:
 	
     virtual void Deposit(int money)
     {
+	if (money < 0)
+	    throw MinusException(money);
+
 	NormalAccount::Deposit(money);
 	Account::Deposit(money*(specialRate / 100.0));
     }

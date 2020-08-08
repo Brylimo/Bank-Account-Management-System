@@ -5,7 +5,7 @@ TARGET = main
 
 all : $(TARGET)
 
-Account.o : Account.cpp Account.h BankingCommonDecl.h String.h
+Account.o : Account.cpp Account.h BankingCommonDecl.h String.h AccountException.h
 	$(CXX) -c $<
 
 AccountHandler.o : AccountHandler.cpp AccountHandler.h Account.h BankingCommonDecl.h NormalAccount.h HighCreditAccount.h String.h
